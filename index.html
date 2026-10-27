@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foxfire Tech | Local IT & Security - Cheatham County, TN</title>
+<meta name="description" content="Local IT support and cybersecurity for small businesses and individuals in Ashland City and Cheatham County, Tennessee.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1612;
+    --bg-alt: #151f19;
+    --card: #1b2720;
+    --text: #e8ede9;
+    --muted: #a3b2a8;
+    --glow: #9be564;
+    --glow-soft: rgba(155, 229, 100, 0.12);
+    --line: #2a3a30;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  a { color: var(--glow); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header */
+  header { border-bottom: 1px solid var(--line); }
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; }
+  .logo { font-family: "Fraunces", serif; font-size: 1.4rem; font-weight: 700; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--glow); }
+  .nav-links a { color: var(--muted); text-decoration: none; margin-left: 22px; font-size: 0.95rem; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero { padding: 90px 0 70px; background: radial-gradient(ellipse at 20% 0%, var(--glow-soft), transparent 60%); }
+  .eyebrow { color: var(--glow); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .hero h1 { font-family: "Fraunces", serif; font-size: clamp(2.1rem, 5vw, 3.3rem); line-height: 1.15; margin: 14px 0 18px; max-width: 720px; }
+  .hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; }
+  .btn {
+    display: inline-block; margin-top: 30px; padding: 14px 26px;
+    background: var(--glow); color: #0f1612; font-weight: 600;
+    border-radius: 8px; text-decoration: none;
+  }
+  .btn:hover { filter: brightness(1.08); }
+
+  /* Sections */
+  section { padding: 70px 0; }
+  section.alt { background: var(--bg-alt); }
+  h2 { font-family: "Fraunces", serif; font-size: 2rem; margin-bottom: 10px; }
+  .lead { color: var(--muted); margin-bottom: 36px; max-width: 620px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 0.95rem; }
+  .card .icon { font-size: 1.5rem; margin-bottom: 10px; }
+
+  .promise { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px; }
+  .promise div { border-left: 3px solid var(--glow); padding-left: 18px; }
+  .promise h3 { margin-bottom: 6px; }
+  .promise p { color: var(--muted); }
+
+  /* Contact */
+  .contact-box {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 40px; text-align: center;
+  }
+  .contact-box p { color: var(--muted); margin-bottom: 8px; }
+  .contact-line { font-size: 1.15rem; margin-top: 14px; }
+  .contact-line a { text-decoration: none; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0; color: var(--muted); font-size: 0.85rem; text-align: center; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hero { padding: 60px 0 50px; }
+    section { padding: 54px 0; }
+    .contact-box { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo">Foxfire<span>Tech</span></a>
+    <nav class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#why">Why Me</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Ashland City &middot; Cheatham County, TN</div>
+    <h1>Local IT and cybersecurity, from someone who lives here.</h1>
+    <p>Small businesses and individuals get straight answers, fair prices, and a real person on the phone. No phone trees, no outsourcing, no runaround.</p>
+    <a href="#contact" class="btn">Get a Free 30-Minute Tech Checkup</a>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <h2>What I Do</h2>
+    <p class="lead">Practical help that keeps your business running and your information safe.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="icon">&#128179;</div>
+        <h3>Payments & Invoicing</h3>
+        <p>Online card and bank payments, invoices, and deposits set up so you get paid faster.</p>
+      </div>
+      <div class="card">
+        <div class="icon">&#128205;</div>
+        <h3>Get Found Online</h3>
+        <p>Google listing, hours, reviews, and a simple website so customers can find you.</p>
+      </div>
+      <div class="card">
+        <div class="icon">&#128187;</div>
+        <h3>Computers & Devices</h3>
+        <p>New computer setup, phones and tablets for your crew, Wi-Fi, and printers that cooperate.</p>
+      </div>
+      <div class="card">
+        <div class="icon">&#128274;</div>
+        <h3>Security & Backups</h3>
+        <p>Account protection, backups, and device security so one bad click doesn't sink you.</p>
+      </div>
+      <div class="card">
+        <div class="icon">&#128736;</div>
+        <h3>Ongoing Support</h3>
+        <p>Monthly plans with updates, monitoring, and a direct line when something breaks.</p>
+      </div>
+      <div class="card">
+        <div class="icon">&#127968;</div>
+        <h3>Home & Personal</h3>
+        <p>Scam cleanup, password managers, and locking down your accounts, in plain English.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="why" class="alt">
+  <div class="wrap">
+    <h2>Why Foxfire Tech</h2>
+    <p class="lead">6 years in IT, including federal systems and cybersecurity, now working for my neighbors.</p>
+    <div class="promise">
+      <div>
+        <h3>You call, you get me</h3>
+        <p>No robot menus or hold music. The person who answers is the person who fixes it.</p>
+      </div>
+      <div>
+        <h3>I'm the one who shows up</h3>
+        <p>Need someone on site? It's me, not a stranger from a call center.</p>
+      </div>
+      <div>
+        <h3>No contracts to start</h3>
+        <p>Clear pricing up front. You know what you're paying before any work begins.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <h2>Let's Fix Your Tech Headaches</h2>
+      <p>Free 30-minute tech checkup for new local clients.</p>
+      <p class="contact-line">&#128231; <a href="mailto:davidewing615@gmail.com">davidewing615@gmail.com</a></p>
+      <p class="contact-line">&#128222; <a href="tel:+1XXXXXXXXXX">[YOUR PHONE]</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">&copy; 2026 Foxfire Tech &middot; David Ewing &middot; Ashland City, Tennessee</div>
+</footer>
+
+</body>
+</html>
