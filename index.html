@@ -43,12 +43,15 @@
   .eyebrow { color: var(--glow); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; }
   .hero h1 { font-family: "Fraunces", serif; font-size: clamp(2.1rem, 5vw, 3.3rem); line-height: 1.15; margin: 14px 0 18px; max-width: 720px; }
   .hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; }
+  .hero-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 30px; }
   .btn {
-    display: inline-block; margin-top: 30px; padding: 14px 26px;
+    display: inline-block; padding: 14px 26px;
     background: var(--glow); color: #0f1612; font-weight: 600;
-    border-radius: 8px; text-decoration: none;
+    border: 2px solid var(--glow); border-radius: 8px; text-decoration: none;
   }
   .btn:hover { filter: brightness(1.08); }
+  .btn-secondary { background: transparent; color: var(--glow); }
+  .btn-secondary:hover { background: var(--glow-soft); filter: none; }
 
   /* Sections */
   section { padding: 70px 0; }
@@ -67,6 +70,24 @@
   .promise h3 { margin-bottom: 6px; }
   .promise p { color: var(--muted); }
 
+  /* About */
+  .about { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
+  .about-text p { color: var(--muted); margin-bottom: 16px; }
+  .about-text p strong { color: var(--text); font-weight: 600; }
+  .signoff { font-family: "Fraunces", serif; font-size: 1.2rem; color: var(--text) !important; }
+  .skills { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+  .skills h3 { font-size: 1rem; margin-bottom: 14px; }
+  .skills ul { list-style: none; }
+  .skills li { color: var(--muted); font-size: 0.95rem; padding: 7px 0 7px 22px; position: relative; border-bottom: 1px solid var(--line); }
+  .skills li:last-child { border-bottom: none; }
+  .skills li::before { content: ""; position: absolute; left: 4px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: var(--glow); }
+
+  /* Values */
+  .values { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .value { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+  .value h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--glow); }
+  .value p { color: var(--muted); font-size: 0.95rem; }
+
   /* Contact */
   .contact-box {
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
@@ -78,6 +99,9 @@
 
   footer { border-top: 1px solid var(--line); padding: 28px 0; color: var(--muted); font-size: 0.85rem; text-align: center; }
 
+  @media (max-width: 700px) {
+    .about { grid-template-columns: 1fr; gap: 28px; }
+  }
   @media (max-width: 600px) {
     .nav-links { display: none; }
     .hero { padding: 60px 0 50px; }
@@ -93,7 +117,8 @@
     <a href="#" class="logo">Foxfire<span>Tech</span></a>
     <nav class="nav-links">
       <a href="#services">Services</a>
-      <a href="#why">Why Me</a>
+      <a href="#about">About</a>
+      <a href="#values">How I Am</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -104,7 +129,10 @@
     <div class="eyebrow">Ashland City &middot; Cheatham County, TN</div>
     <h1>Local IT and cybersecurity, from someone who lives here.</h1>
     <p>Small businesses and individuals get straight answers, fair prices, and a real person on the phone. No phone trees, no outsourcing, no runaround.</p>
-    <a href="#contact" class="btn">Get a Free 30-Minute Tech Checkup</a>
+    <div class="hero-actions">
+      <a href="#contact" class="btn">Get a Free 30-Minute Tech Checkup</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScmOMCjItaF4D_C3R-gF29YHrA5qrJhjli-iA9pUPUpCa6GBA/viewform?usp=header" class="btn btn-secondary" target="_blank" rel="noopener">Know What You Need? Request Service Here</a>
+    </div>
   </div>
 </section>
 
@@ -147,10 +175,70 @@
   </div>
 </section>
 
+<section id="about" class="alt">
+  <div class="wrap">
+    <h2>Hey, I'm David</h2>
+    <p class="lead">Fourth-generation Tennessean, with family roots right here in Cheatham County.</p>
+    <div class="about">
+      <div class="about-text">
+        <p>I've spent my career in IT: helpdesk, systems administration, software engineering, and most recently keeping things secure and running for the federal judiciary. I've worked for big organizations, local government, and nonprofits, and I've seen what happens when small problems get ignored until they turn into big ones.</p>
+        <p>I started Foxfire Tech because the businesses I grew up around deserve the same level of care, without the big-city price tag or the runaround. <strong>I'm not here to sell you things you don't need.</strong> I'm here to make your tech work, keep your information safe, and explain it so it makes sense.</p>
+        <p>I'd rather teach you how something works than keep you dependent on me. If you want to learn, I'll show you. If you just want it fixed, I'll fix it.</p>
+        <p class="signoff">- David Ewing</p>
+      </div>
+      <div class="skills">
+        <h3>What I bring to the table</h3>
+        <ul>
+          <li>6 years in IT support and systems administration</li>
+          <li>Cybersecurity expertise and monitoring</li>
+          <li>Software engineering background</li>
+          <li>Windows deployment and device management</li>
+          <li>Automating repetitive work so it stops costing you time</li>
+          <li>Vetting software and vendors before you buy</li>
+          <li>Nonprofit and local government experience</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="values">
+  <div class="wrap">
+    <h2>How I Am</h2>
+    <p class="lead">A few things you can count on, every time.</p>
+    <div class="values">
+      <div class="value">
+        <h3>Honest, even when it costs me</h3>
+        <p>If you don't need it, I'll tell you. If something's outside what I do, I'll point you to someone who does it well.</p>
+      </div>
+      <div class="value">
+        <h3>Your data is yours</h3>
+        <p>I don't keep your passwords, I don't sell your information, and I only access what the job requires.</p>
+      </div>
+      <div class="value">
+        <h3>No question is a dumb question</h3>
+        <p>Plain English, no jargon, and no making you feel bad for asking. Everybody starts somewhere.</p>
+      </div>
+      <div class="value">
+        <h3>Prices up front</h3>
+        <p>You'll know what it costs before any work starts. No surprise bills, no fine print.</p>
+      </div>
+      <div class="value">
+        <h3>I own my mistakes</h3>
+        <p>If I get something wrong, I'll tell you straight and make it right.</p>
+      </div>
+      <div class="value">
+        <h3>Neighbors first</h3>
+        <p>I live here. My reputation is my business, and I treat every client like I'll see them at the grocery store. Because I will.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="why" class="alt">
   <div class="wrap">
     <h2>Why Foxfire Tech</h2>
-    <p class="lead">6 years in IT, including federal systems and cybersecurity, now working for my neighbors.</p>
+    <p class="lead">The kind of service a big IT company can't offer.</p>
     <div class="promise">
       <div>
         <h3>You call, you get me</h3>
@@ -172,9 +260,9 @@
   <div class="wrap">
     <div class="contact-box">
       <h2>Let's Fix Your Tech Headaches</h2>
-      <p>Free 30-minute tech checkup for new local clients.</p>
+      <p>Free 30-minute tech checkup for new clients in Cheatham & Davidson County.</p>
       <p class="contact-line">&#128231; <a href="mailto:davidewing615@gmail.com">davidewing615@gmail.com</a></p>
-      <p class="contact-line">&#128222; <a href="tel:+1XXXXXXXXXX">[YOUR PHONE]</a></p>
+      <p class="contact-line">&#128222; <a href="tel:+16158157432">615-815-7432</a></p>
     </div>
   </div>
 </section>
