@@ -67,6 +67,7 @@
   .flipper.flipped { transform: rotateY(180deg); }
   .face {
     grid-area: 1 / 1;
+    min-width: 0;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     min-height: 100vh;
@@ -398,6 +399,74 @@
     80% { transform: rotate(5deg); }
   }
 
+  /* ---------- Service cards: icons + hover details ---------- */
+  .front .grid { grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+  .card.svc { min-height: 18.5rem; position: relative; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; outline: none; }
+  .card.svc:focus-visible { box-shadow: 0 0 0 2px var(--glow); }
+  .card .icon {
+    width: 2.75rem; height: 2.75rem; border-radius: 0.6rem; margin-bottom: 0.95rem;
+    display: grid; place-items: center;
+    background: var(--glow-soft); border: 1px solid rgba(155, 229, 100, 0.25); color: var(--glow);
+    font-size: 1rem;
+  }
+  .card .icon svg { width: 1.45rem; height: 1.45rem; }
+  .more { margin-top: auto; padding-top: 1rem; font-size: 0.8rem; font-weight: 600; color: var(--glow); letter-spacing: 0.02em; opacity: 0.85; }
+  .more::after { content: " +"; }
+  .more-tap { display: none; }
+  @media (hover: none) { .more-hover { display: none; } .more-tap { display: inline; } }
+  .details {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; flex-direction: column;
+    padding: 1.15rem 1.35rem 1.05rem;
+    background: linear-gradient(180deg, #1f3527 0%, #15231a 100%);
+    border-top: 2px solid var(--glow);
+    transform: translateY(101%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    overflow-y: auto; scrollbar-width: none;
+  }
+  .details::-webkit-scrollbar { display: none; }
+  .details h4 { font-size: 0.98rem; margin-bottom: 0.65rem; color: var(--text); }
+  .details ul { list-style: none; display: grid; gap: 0.32rem; }
+  .details li {
+    position: relative; padding-left: 1.2rem; color: #c7d3cb; font-size: 0.86rem; line-height: 1.38;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.35s ease;
+  }
+  .details li::before {
+    content: ""; position: absolute; left: 0.1rem; top: 0.32em; width: 0.32rem; height: 0.6rem;
+    border: solid var(--glow); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .details .ask { margin-top: auto; padding-top: 0.8rem; font-weight: 600; font-size: 0.88rem; color: var(--glow); text-decoration: none; }
+  .details .ask:hover { text-decoration: underline; }
+  @media (hover: hover) { .card.svc:hover .details { transform: none; } }
+  .card.svc:focus-within .details, .card.svc.open .details { transform: none; }
+  @media (hover: hover) { .card.svc:hover .details li { opacity: 1; transform: none; } }
+  .card.svc:focus-within .details li, .card.svc.open .details li { opacity: 1; transform: none; }
+  .details li:nth-child(1) { transition-delay: 0.08s; }
+  .details li:nth-child(2) { transition-delay: 0.13s; }
+  .details li:nth-child(3) { transition-delay: 0.18s; }
+  .details li:nth-child(4) { transition-delay: 0.23s; }
+  .details li:nth-child(5) { transition-delay: 0.28s; }
+  .ico svg { width: 1.15rem; height: 1.15rem; vertical-align: -0.2em; color: var(--glow); }
+
+  /* "Sound Familiar?" problem/fix cards */
+  .fixes { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.1rem; }
+  .fix { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1.4rem 1.5rem; }
+  .fix .prob { position: relative; padding-left: 1.5rem; font-weight: 600; color: var(--text); margin-bottom: 0.6rem; }
+  .fix .prob::before {
+    content: "?"; position: absolute; left: 0; top: 0.1rem; width: 1.05rem; height: 1.05rem; border-radius: 50%;
+    display: grid; place-items: center; font-size: 0.7rem; font-weight: 700;
+    background: rgba(229, 160, 60, 0.15); color: #f0b45c; border: 1px solid rgba(240, 180, 92, 0.4);
+  }
+  .fix .sol { position: relative; padding-left: 1.5rem; color: var(--muted); font-size: 0.95rem; }
+  .fix .sol::before {
+    content: ""; position: absolute; left: 0.3rem; top: 0.3rem; width: 0.35rem; height: 0.65rem;
+    border: solid var(--glow); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .fix.in:hover { transform: translateY(-4px); border-color: rgba(155, 229, 100, 0.45); transition: transform 0.25s ease, border-color 0.25s; }
+  .tier { color: var(--m-muted); font-size: 0.72rem; letter-spacing: 0.12em; margin: 0 0 0.7rem; }
+  .chips + .tier { margin-top: 1.6rem; }
+
   /* ---------- MSP side: animations ---------- */
 
   /* Fire on "Tech" */
@@ -460,7 +529,18 @@
   .back.m-live .m-hero p { transition-delay: 0.3s; }
   .back.m-live .m-hero .m-btn { transition-delay: 0.45s; }
   .scramble { font-variant-ligatures: none; }
-  .scramble .sc { color: var(--m-muted); opacity: 0.7; }
+  /* Glyph layer: glitched letters keep their real width, symbol drawn on top */
+  .ch { position: relative; }
+  .ch.g { color: transparent !important; text-shadow: none !important; }
+  .ch.g::after {
+    content: attr(data-g); position: absolute; left: 0; right: 0; top: 0; text-align: center;
+    color: var(--m-muted); opacity: 0.75; text-shadow: var(--outline);
+  }
+  .back h2.corrupting .ch.g::after {
+    color: #ff5c61; opacity: 1;
+    text-shadow: 2px 0 rgba(255, 0, 70, 0.75), -2px 0 rgba(0, 220, 255, 0.6), var(--outline);
+  }
+  .back h2.cleared .ch.g::after { color: #4a5a6a; text-shadow: var(--outline); }
 
   /* Button shine */
   .m-btn { position: relative; overflow: hidden; }
@@ -537,20 +617,6 @@
 
   /* ---------- MSP side: header corruption + terminal repair ---------- */
   .back .wrap { position: relative; }
-  .back h2.corrupt {
-    color: #ff6b6e;
-    text-shadow: 2px 0 rgba(255, 0, 70, 0.85), -2px 0 rgba(0, 220, 255, 0.75), 0 0 3px #000;
-    animation: jitter 0.14s steps(2) infinite;
-  }
-  @keyframes jitter {
-    0%   { transform: translate(0, 0) skewX(0); clip-path: inset(0 0 0 0); }
-    25%  { transform: translate(-2px, 1px) skewX(-7deg); clip-path: inset(10% 0 35% 0); }
-    50%  { transform: translate(2px, -1px) skewX(3deg); clip-path: inset(0 0 0 0); }
-    75%  { transform: translate(-1px, 0) skewX(5deg); clip-path: inset(45% 0 5% 0); }
-    100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
-  }
-  .back h2.rebuilt { color: var(--m-muted); }
-  .back h2 .caret { display: inline-block; width: 0.55em; color: #6fdcff; animation: blink 0.8s steps(1) infinite; }
   .back h2.healing { animation: heal 1.6s ease-out both; }
   @keyframes heal {
     0%   { color: #bfefff; text-shadow: 0 0 0 rgba(80, 200, 255, 0), var(--outline); }
@@ -566,33 +632,50 @@
   @keyframes healsweep { from { transform: translateX(0); opacity: 1; } to { transform: translateX(420%); opacity: 0; } }
 
   .term {
-    position: absolute; z-index: 5; right: 1.25rem; width: min(30rem, calc(100% - 2.5rem));
+    z-index: 5;
     background: #0c1622; border: 1px solid #2b4a66; border-radius: 6px;
     box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(111, 220, 255, 0.08);
     font: 500 0.8rem/1.55 "JetBrains Mono", ui-monospace, Consolas, monospace;
     color: #cfe9ff; text-shadow: none;
-    transform-origin: top right; transform: scale(0.9) translateY(-0.5rem); opacity: 0;
-    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
-    pointer-events: none;
+    display: flex; flex-direction: column; overflow: hidden;
+    contain: inline-size; min-width: 0;
+    opacity: 0;
   }
-  .term.open { transform: none; opacity: 1; }
+  .term.side {
+    position: absolute;
+    transform-origin: left center; transform: translateX(-0.75rem) scale(0.96);
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+  }
+  .term.side.open { transform: none; opacity: 1; }
+  .term.inline {
+    position: relative; width: 100%; max-width: 34rem; height: 0; margin: -2.25rem 0 2.25rem;
+    transition: height 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), margin 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+  }
+  .term.inline.open { height: 10rem; margin: -1rem 0 2.25rem; opacity: 1; }
+  .m-contact .term.inline { margin: 0 auto; text-align: left; }
+  .m-contact .term.inline.open { margin: 0.75rem auto 1rem; }
+  .term .term-body { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
+  .term .term-body::-webkit-scrollbar { display: none; }
+  .tt { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .term-bar .ctrl { color: #6c8aa6; padding: 0 0.35rem; }
+  .tx {
+    appearance: none; border: 0; background: transparent; color: #9fc4e4; cursor: pointer;
+    font: inherit; font-size: 0.95rem; line-height: 1; padding: 0.1rem 0.45rem; border-radius: 3px;
+  }
+  .tx:hover { background: #c42b1c; color: #fff; }
   .term-bar {
     display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.75rem;
     background: #12263a; border-bottom: 1px solid #2b4a66; border-radius: 6px 6px 0 0;
     color: #9fc4e4; font-size: 0.72rem;
   }
   .term-bar .ps { width: 0.9rem; height: 0.9rem; border-radius: 2px; background: #2a74c5; color: #fff; display: grid; place-items: center; font-size: 0.6rem; font-weight: 700; }
-  .term-bar .ctrl { margin-left: auto; letter-spacing: 0.6rem; color: #6c8aa6; }
-  .term-body { margin: 0; padding: 0.7rem 0.85rem 0.85rem; white-space: pre-wrap; word-break: break-word; min-height: 8.5rem; }
+  .term-body { margin: 0; padding: 0.6rem 0.85rem 0.7rem; white-space: pre-wrap; word-break: break-word; }
   .term-body .pr { color: #e8f4ff; }
   .term-body .cmd { color: #f9f1a5; }
   .term-body .arg { color: #9be3ff; }
   .term-body .ok { color: #8ff0b0; }
   .term-body .dim { color: #7f9bb5; }
   .term-body .tc { display: inline-block; width: 0.55em; background: #cfe9ff; animation: blink 0.9s steps(1) infinite; }
-  @media (max-width: 700px) {
-    .term { right: 0.75rem; left: 0.75rem; width: auto; transform-origin: top center; }
-  }
 
   /* ---------- Responsive / motion ---------- */
   @media (max-width: 700px) {
@@ -616,6 +699,7 @@
     .front .squiggle path { stroke-dashoffset: 0 !important; }
     .skills li::before, .promise div::before { transform: none !important; }
     .fireflies, .spore { display: none; }
+    .details li { opacity: 1 !important; transform: none !important; }
     .shroom { transform: rotate(var(--rot, 0deg)) scale(1) !important; filter: drop-shadow(0 0 3px rgba(80, 200, 255, 0.8)); }
   }
 </style>
@@ -690,41 +774,110 @@
           <h2>What I Do</h2>
           <p class="lead">Practical help that keeps your business running and your information safe.</p>
           <div class="grid">
-            <div class="card">
-              <div class="icon">&#128179;</div>
-              <h3>Payments & Invoicing</h3>
+            <div class="card svc" tabindex="0">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19"/><path d="M6 15h4"/></svg></div>
+              <h3>Payments &amp; Invoicing</h3>
               <p>Online card and bank payments, invoices, and deposits set up so you get paid faster.</p>
+              <span class="more"><span class="more-hover">Hover for details</span><span class="more-tap">Tap for details</span></span>
+              <div class="details">
+                <h4>Payments &amp; Invoicing</h4>
+                <ul><li>Square or Stripe setup</li><li>Invoices with a pay-online button</li><li>Deposits before big jobs</li><li>Bank payments with lower fees</li><li>See who&#39;s paid at a glance</li></ul>
+                <a class="ask" href="https://docs.google.com/forms/d/e/1FAIpQLScmOMCjItaF4D_C3R-gF29YHrA5qrJhjli-iA9pUPUpCa6GBA/viewform?usp=header" target="_blank" rel="noopener">Request this &rarr;</a>
+              </div>
             </div>
-            <div class="card">
-              <div class="icon">&#128205;</div>
+            <div class="card svc" tabindex="0">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
               <h3>Get Found Online</h3>
               <p>Google listing, hours, reviews, and a simple website so customers can find you.</p>
+              <span class="more"><span class="more-hover">Hover for details</span><span class="more-tap">Tap for details</span></span>
+              <div class="details">
+                <h4>Get Found Online</h4>
+                <ul><li>Google profile set up or fixed</li><li>Right hours, photos, service area</li><li>An easy way to get reviews</li><li>A clean site with a contact form</li></ul>
+                <a class="ask" href="https://docs.google.com/forms/d/e/1FAIpQLScmOMCjItaF4D_C3R-gF29YHrA5qrJhjli-iA9pUPUpCa6GBA/viewform?usp=header" target="_blank" rel="noopener">Request this &rarr;</a>
+              </div>
             </div>
-            <div class="card">
-              <div class="icon">&#128187;</div>
-              <h3>Computers & Devices</h3>
+            <div class="card svc" tabindex="0">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="10.5" rx="1.5"/><path d="M2 19h20"/></svg></div>
+              <h3>Computers &amp; Devices</h3>
               <p>New computer setup, phones and tablets for your crew, Wi-Fi, and printers that cooperate.</p>
+              <span class="more"><span class="more-hover">Hover for details</span><span class="more-tap">Tap for details</span></span>
+              <div class="details">
+                <h4>Computers &amp; Devices</h4>
+                <ul><li>New computers set up, files moved</li><li>Phones and tablets for your crew</li><li>Lock or wipe lost devices</li><li>Wi-Fi that reaches, plus guest Wi-Fi</li><li>Printers that just print</li></ul>
+                <a class="ask" href="https://docs.google.com/forms/d/e/1FAIpQLScmOMCjItaF4D_C3R-gF29YHrA5qrJhjli-iA9pUPUpCa6GBA/viewform?usp=header" target="_blank" rel="noopener">Request this &rarr;</a>
+              </div>
             </div>
-            <div class="card">
-              <div class="icon">&#128274;</div>
-              <h3>Security & Backups</h3>
-              <p>Account protection, backups, and device security so one bad click doesn't sink you.</p>
+            <div class="card svc" tabindex="0">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+              <h3>Security &amp; Backups</h3>
+              <p>Account protection, backups, and device security so one bad click doesn&#39;t sink you.</p>
+              <span class="more"><span class="more-hover">Hover for details</span><span class="more-tap">Tap for details</span></span>
+              <div class="details">
+                <h4>Security &amp; Backups</h4>
+                <ul><li>Two-step login on email and bank</li><li>Backups that are actually tested</li><li>Threat protection on every device</li><li>Scans that find weak spots first</li><li>Help with cyber-insurance forms</li></ul>
+                <a class="ask" href="https://docs.google.com/forms/d/e/1FAIpQLScmOMCjItaF4D_C3R-gF29YHrA5qrJhjli-iA9pUPUpCa6GBA/viewform?usp=header" target="_blank" rel="noopener">Request this &rarr;</a>
+              </div>
             </div>
-            <div class="card">
-              <div class="icon">&#128736;</div>
+            <div class="card svc" tabindex="0">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13.5" width="4" height="6.5" rx="1.5"/><rect x="17" y="13.5" width="4" height="6.5" rx="1.5"/><path d="M19 20.5c0 1.1-1.3 2-3 2h-2.5"/></svg></div>
               <h3>Ongoing Support</h3>
               <p>Monthly plans with updates, monitoring, and a direct line when something breaks.</p>
+              <span class="more"><span class="more-hover">Hover for details</span><span class="more-tap">Tap for details</span></span>
+              <div class="details">
+                <h4>Ongoing Support</h4>
+                <ul><li>Updates handled for you</li><li>Problems caught early</li><li>A direct line to me</li><li>New hires set up, exits locked out</li><li>One flat monthly price</li></ul>
+                <a class="ask" href="https://docs.google.com/forms/d/e/1FAIpQLScmOMCjItaF4D_C3R-gF29YHrA5qrJhjli-iA9pUPUpCa6GBA/viewform?usp=header" target="_blank" rel="noopener">Request this &rarr;</a>
+              </div>
             </div>
-            <div class="card">
-              <div class="icon">&#127968;</div>
-              <h3>Home & Personal</h3>
+            <div class="card svc" tabindex="0">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 9.8V20h14V9.8"/><path d="M10 20v-5.5h4V20"/></svg></div>
+              <h3>Home &amp; Personal</h3>
               <p>Scam cleanup, password managers, and locking down your accounts, in plain English.</p>
+              <span class="more"><span class="more-hover">Hover for details</span><span class="more-tap">Tap for details</span></span>
+              <div class="details">
+                <h4>Home &amp; Personal</h4>
+                <ul><li>Scam and pop-up cleanup</li><li>A password manager, explained</li><li>Email and social locked down</li><li>Home Wi-Fi secured</li><li>Patient help for older folks</li></ul>
+                <a class="ask" href="https://docs.google.com/forms/d/e/1FAIpQLScmOMCjItaF4D_C3R-gF29YHrA5qrJhjli-iA9pUPUpCa6GBA/viewform?usp=header" target="_blank" rel="noopener">Request this &rarr;</a>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="about" class="alt">
+      <section id="fixes" class="alt">
+        <div class="wrap">
+          <h2>Sound Familiar?</h2>
+          <p class="lead">Real problems small businesses run into, and what I do about them.</p>
+          <div class="fixes">
+            <div class="fix">
+              <p class="prob">An employee quits on bad terms.</p>
+              <p class="sol">Their email, files, and logins are shut off in minutes, their company phone or laptop can be wiped remotely, and your data stays with you.</p>
+            </div>
+            <div class="fix">
+              <p class="prob">A laptop gets left at a gas station.</p>
+              <p class="sol">It's encrypted, so the files can't be read. I can lock or wipe it from here, and you're back up on a new one fast.</p>
+            </div>
+            <div class="fix">
+              <p class="prob">Someone's email gets hacked.</p>
+              <p class="sol">I lock the account, kick the intruder out, and set up two-step login and sign-in rules that block logins from places your team never is.</p>
+            </div>
+            <div class="fix">
+              <p class="prob">You need five new computers.</p>
+              <p class="sol">I'll tell you exactly what to buy for your budget, then set every one up the same way so they're ready the day they arrive.</p>
+            </div>
+            <div class="fix">
+              <p class="prob">The Wi-Fi drops or the internet crawls.</p>
+              <p class="sol">I find the real cause instead of guessing, fix coverage in the back office, and give customers their own guest Wi-Fi.</p>
+            </div>
+            <div class="fix">
+              <p class="prob">Nobody knows how anything is set up.</p>
+              <p class="sol">I map it out and write it down in plain English: passwords stored safely, accounts listed, and who to call for what.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about">
         <div class="wrap">
           <h2>Hey, I'm David</h2>
           <p class="lead">Fourth-generation Tennessean, with family roots right here in Cheatham County.</p>
@@ -738,12 +891,15 @@
             <div class="skills">
               <h3>What I bring to the table</h3>
               <ul>
-                <li>6 years in IT support and systems administration</li>
-                <li>Cybersecurity expertise and monitoring</li>
-                <li>Software engineering background</li>
-                <li>Windows deployment and device management</li>
-                <li>Automating repetitive work so it stops costing you time</li>
-                <li>Vetting software and vendors before you buy</li>
+                <li>6 years in IT support and systems administration, most recently for the federal judiciary</li>
+                <li>Every work computer and phone managed from one place</li>
+                <li>Only the right people get into your email, files, and accounts</li>
+                <li>New hires ready on day one, ex-employees locked out the same day</li>
+                <li>Lost or stolen laptops stay encrypted and useless to whoever has them</li>
+                <li>Enterprise-grade scanning that finds weak spots before hackers do</li>
+                <li>Repetitive computer busywork automated so it stops eating your time</li>
+                <li>Honest advice on what to buy, and what not to</li>
+                <li>Everything written down, so you're never stuck without me</li>
                 <li>Nonprofit and local government experience</li>
               </ul>
             </div>
@@ -751,7 +907,7 @@
         </div>
       </section>
 
-      <section id="values">
+      <section id="values" class="alt">
         <div class="wrap">
           <h2>How I Am</h2>
           <p class="lead">A few things you can count on, every time.</p>
@@ -784,7 +940,7 @@
         </div>
       </section>
 
-      <section id="why" class="alt">
+      <section id="why">
         <div class="wrap">
           <h2>Why Foxfire Tech</h2>
           <p class="lead">The kind of service a big IT company can't offer.</p>
@@ -805,13 +961,13 @@
         </div>
       </section>
 
-      <section id="contact">
+      <section id="contact" class="alt">
         <div class="wrap">
           <div class="contact-box">
             <h2>Let's Fix Your Tech Headaches</h2>
             <p>Free 30-minute tech checkup for new clients in Cheatham & Davidson County.</p>
-            <p class="contact-line"><span class="ico">&#128231;</span> <a href="mailto:davidewing615@gmail.com">davidewing615@gmail.com</a></p>
-            <p class="contact-line"><span class="ico">&#128222;</span> <a href="tel:+16158157432">615-815-7432</a></p>
+            <p class="contact-line"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></span> <a href="mailto:davidewing615@gmail.com">davidewing615@gmail.com</a></p>
+            <p class="contact-line"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16.5v3a2 2 0 0 1-2.2 2 18.5 18.5 0 0 1-8-2.9 18.2 18.2 0 0 1-5.6-5.6A18.5 18.5 0 0 1 2.4 5.1 2 2 0 0 1 4.4 3h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L8.2 10.6a15 15 0 0 0 5.2 5.2l1.3-1.3a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6a2 2 0 0 1 1.7 2z"/></svg></span> <a href="tel:+16158157432">615-815-7432</a></p>
           </div>
         </div>
       </section>
@@ -841,7 +997,7 @@
           <div class="m-panel">
           <div class="m-eyebrow mono">Partner Services &middot; Middle Tennessee<span class="cursor">_</span></div>
           <h1>Overflow capacity and onsite hands for <em class="scramble" data-text="MSPs and IT teams.">MSPs and IT teams.</em></h1>
-          <p>Independent IT and security contractor with federal judiciary, local government, and enterprise experience. I plug into your process, work under your brand, and close tickets your way.</p>
+          <p>Independent IT contractor with federal judiciary, local government, and enterprise experience, strongest in Intune, Entra ID, endpoint deployment, and vulnerability management. I plug into your process, work under your brand, and close tickets your way.</p>
           <a href="#p-contact" class="m-btn">Talk Partnership</a>
           </div>
         </div>
@@ -855,34 +1011,34 @@
           </div>
           <div class="m-grid">
             <div class="m-card">
-              <div class="tag mono">01 / OVERFLOW</div>
-              <h3>Helpdesk & Tier 2 Support</h3>
-              <p>Remote ticket coverage during spikes, vacations, or staffing gaps.</p>
+              <div class="tag mono">01 / IDENTITY</div>
+              <h3>Identity & Device Management</h3>
+              <p>Intune enrollment, compliance policies, and dynamic device groups. Entra ID, Conditional Access, SSO, and AD / Group Policy.</p>
             </div>
             <div class="m-card">
-              <div class="tag mono">02 / ONSITE</div>
-              <h3>Onsite Dispatch</h3>
-              <p>Hands on site west of Nashville: Cheatham, Davidson, and surrounding counties.</p>
+              <div class="tag mono">02 / DEPLOY</div>
+              <h3>Deployment & Automation</h3>
+              <p>MDT imaging, offline domain join, and PDQ Deploy / Connect packaging, backed by PowerShell and Python scripting and Selenium-automated testing.</p>
             </div>
             <div class="m-card">
-              <div class="tag mono">03 / DEPLOY</div>
-              <h3>Deployment & Imaging</h3>
-              <p>Windows rollouts, device refreshes, migrations, and new-site buildouts.</p>
+              <div class="tag mono">03 / LIFECYCLE</div>
+              <h3>Onboarding & Lifecycle</h3>
+              <p>Provisioning and offboarding, data retention, BitLocker, hardware refresh cycles, and asset tracking.</p>
             </div>
             <div class="m-card">
-              <div class="tag mono">04 / AUTOMATE</div>
-              <h3>Patching & Automation</h3>
-              <p>PowerShell scripting, patch baselines, and turning repetitive tickets into automated jobs.</p>
+              <div class="tag mono">04 / OVERFLOW</div>
+              <h3>Overflow & Onsite</h3>
+              <p>Remote ticket coverage during spikes and staffing gaps, plus hands on site across Cheatham, Davidson, and surrounding counties.</p>
             </div>
             <div class="m-card">
               <div class="tag mono">05 / SECURE</div>
-              <h3>Security Support</h3>
-              <p>Security monitoring, hardening, MFA rollouts, and admin rights cleanup.</p>
+              <h3>Vulnerability Management</h3>
+              <p>Stood up an enterprise vulnerability management platform end to end: agents, asset inventory, scan prioritization, patching, policy compliance, and web app scanning. Plus Defender / EDR and firewall rules.</p>
             </div>
             <div class="m-card">
-              <div class="tag mono">06 / VET</div>
-              <h3>Vendor & Tooling Review</h3>
-              <p>Evaluating software and vendors before your clients commit.</p>
+              <div class="tag mono">06 / DOCUMENT</div>
+              <h3>Vendor Review & Documentation</h3>
+              <p>Vetting software and vendors before clients commit, and documenting environments nobody wrote down.</p>
             </div>
           </div>
         </div>
@@ -892,20 +1048,30 @@
         <div class="wrap">
           <div class="m-head">
             <h2>Stack</h2>
-            <p class="lead">Tools and platforms I work in day to day.</p>
+            <p class="lead">Honestly rated: what I run daily, and what I work in regularly.</p>
           </div>
+          <div class="tier mono">CORE / DAILY DRIVERS</div>
           <div class="chips mono">
-            <span class="chip"><b>&gt;</b>Windows 10/11 Deployment</span>
-            <span class="chip"><b>&gt;</b>PowerShell</span>
-            <span class="chip"><b>&gt;</b>PDQ Deploy / Connect</span>
-            <span class="chip"><b>&gt;</b>Microsoft 365</span>
+            <span class="chip"><b>&gt;</b>Intune</span>
             <span class="chip"><b>&gt;</b>Entra ID</span>
-            <span class="chip"><b>&gt;</b>Active Directory</span>
-            <span class="chip"><b>&gt;</b>Endpoint Security / EDR</span>
-            <span class="chip"><b>&gt;</b>Security Monitoring</span>
-            <span class="chip"><b>&gt;</b>Ticketing (Jira & PSA tools)</span>
-            <span class="chip"><b>&gt;</b>SQL</span>
+            <span class="chip"><b>&gt;</b>Conditional Access</span>
+            <span class="chip"><b>&gt;</b>Active Directory / GPO</span>
+            <span class="chip"><b>&gt;</b>Microsoft 365 / Exchange</span>
+            <span class="chip"><b>&gt;</b>BitLocker</span>
+            <span class="chip"><b>&gt;</b>MDT</span>
+            <span class="chip"><b>&gt;</b>PDQ Deploy / Connect</span>
+            <span class="chip"><b>&gt;</b>Vulnerability Management</span>
+            <span class="chip"><b>&gt;</b>Git / GitHub</span>
+          </div>
+          <div class="tier mono">WORKING KNOWLEDGE</div>
+          <div class="chips mono">
+            <span class="chip"><b>&gt;</b>PowerShell</span>
             <span class="chip"><b>&gt;</b>Python</span>
+            <span class="chip"><b>&gt;</b>Selenium</span>
+            <span class="chip"><b>&gt;</b>Microsoft Defender / EDR</span>
+            <span class="chip"><b>&gt;</b>FortiNet</span>
+            <span class="chip"><b>&gt;</b>Automation Anywhere (A360)</span>
+            <span class="chip"><b>&gt;</b>nmap / Nuclei</span>
           </div>
         </div>
       </section>
@@ -1011,9 +1177,25 @@
     }
   }
 
+  /* Service cards: tap to open details on touch screens */
+  var svcCards = Array.prototype.slice.call(front.querySelectorAll('.card.svc'));
+  svcCards.forEach(function (card) {
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('a')) return;
+      if (window.matchMedia('(hover: hover)').matches) return;
+      var wasOpen = card.classList.contains('open');
+      svcCards.forEach(function (c) { c.classList.remove('open'); });
+      if (!wasOpen) card.classList.add('open');
+    });
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { card.classList.remove('open'); card.blur(); }
+    });
+  });
+
   var fReveals = [];
   [
     { sel: '.card', step: 0.08 },
+    { sel: '.fix', step: 0.08 },
     { sel: '.about-text', step: 0 },
     { sel: '.skills li', step: 0.07, cls: 'from-left' },
     { sel: '.value', step: 0.08 },
@@ -1076,58 +1258,68 @@
     });
   });
 
-  var GLYPHS = '!/\\[]{}=+*^?#01%$&';
+  /* ---------- Glyph layer: swaps characters without changing layout ----------
+     Each letter becomes a span. A glitched letter keeps its real character
+     (invisible) to hold its exact width, and draws the symbol on top. */
+  var GLYPHS = '!/\\[]{}=+*^?#01%$&@<>~|';
+  function rg() { return GLYPHS[(Math.random() * GLYPHS.length) | 0]; }
+  function charify(node, text) {
+    node.textContent = '';
+    var spans = [];
+    for (var i = 0; i < text.length; i++) {
+      if (text[i] === ' ') { node.appendChild(document.createTextNode(' ')); spans.push(null); continue; }
+      var s = document.createElement('span');
+      s.className = 'ch';
+      s.textContent = text[i];
+      node.appendChild(s);
+      spans.push(s);
+    }
+    return spans;
+  }
+  function setG(s, on) {
+    if (!s) return;
+    if (on) { s.setAttribute('data-g', rg()); s.classList.add('g'); }
+    else s.classList.remove('g');
+  }
+
+  /* Hero decode ("MSPs and IT teams.") */
   var scrambleRAF = null;
-  function scramble(el) {
-    var text = el.getAttribute('data-text');
-    var DUR = 1100;
-    var at = [];
-    for (var i = 0; i < text.length; i++) at.push(150 + Math.random() * (DUR - 250));
+  function scramble(node) {
+    var text = node.getAttribute('data-text');
+    var spans = charify(node, text);
+    var DUR = 1100, at = [];
+    for (var i = 0; i < spans.length; i++) at.push(150 + Math.random() * (DUR - 250));
     var start = null;
     cancelAnimationFrame(scrambleRAF);
     function frame(ts) {
       if (start === null) start = ts;
-      var t = ts - start, out = '', done = true;
-      for (var j = 0; j < text.length; j++) {
-        var c = text[j];
-        if (c === ' ' || t >= at[j]) { out += c; }
-        else { done = false; out += '<span class="sc">' + GLYPHS[(Math.random() * GLYPHS.length) | 0] + '</span>'; }
+      var t = ts - start, done = true;
+      for (var j = 0; j < spans.length; j++) {
+        if (!spans[j]) continue;
+        if (t >= at[j]) setG(spans[j], false);
+        else { done = false; setG(spans[j], true); }
       }
-      el.innerHTML = out;
       if (!done) scrambleRAF = requestAnimationFrame(frame);
-      else idleGlitch(el);
+      else idleGlitch(node, spans);
     }
     scrambleRAF = requestAnimationFrame(frame);
   }
 
   /* Constant light glitching after the decode: every 1.5-3.5s,
-     1-3 random letters flicker to symbols for a split second.
-     The text stays readable roughly 90%+ of the time. */
+     1-3 random letters flicker to symbols for a split second. */
   var idleTimer = null;
-  function idleGlitch(el) {
-    var text = el.getAttribute('data-text');
-    var letters = [];
-    for (var i = 0; i < text.length; i++) if (text[i] !== ' ') letters.push(i);
-
-    function render(hits) {
-      var out = '';
-      for (var j = 0; j < text.length; j++) {
-        out += hits[j] ? '<span class="sc">' + GLYPHS[(Math.random() * GLYPHS.length) | 0] + '</span>' : text[j];
-      }
-      el.innerHTML = out;
-    }
-
+  function idleGlitch(node, spans) {
+    var letters = spans.filter(Boolean);
     function burst() {
       if (!back.classList.contains('m-live')) return;
-      var hits = {};
+      var hits = [];
       var n = 1 + ((Math.random() * 3) | 0);
-      for (var k = 0; k < n; k++) hits[letters[(Math.random() * letters.length) | 0]] = true;
-      var flips = 2 + ((Math.random() * 3) | 0);
-      var step = 0;
+      for (var k = 0; k < n; k++) hits.push(letters[(Math.random() * letters.length) | 0]);
+      var flips = 2 + ((Math.random() * 3) | 0), step = 0;
       (function tick() {
         if (!back.classList.contains('m-live')) return;
-        if (step < flips) { render(hits); step++; idleTimer = setTimeout(tick, 55 + Math.random() * 45); }
-        else { el.textContent = text; idleTimer = setTimeout(burst, 1500 + Math.random() * 2000); }
+        if (step < flips) { hits.forEach(function (s) { setG(s, true); }); step++; idleTimer = setTimeout(tick, 55 + Math.random() * 45); }
+        else { hits.forEach(function (s) { setG(s, false); }); idleTimer = setTimeout(burst, 1500 + Math.random() * 2000); }
       })();
     }
     clearTimeout(idleTimer);
@@ -1138,31 +1330,27 @@
   var heads = Array.prototype.slice.call(back.querySelectorAll('section h2'));
   heads.forEach(function (h) { h.setAttribute('data-text', h.textContent); h.setAttribute('aria-label', h.textContent); });
   var healGen = 0, healTimer = null, healRunning = false, activeTerm = null, activeHead = null, lastHead = null;
-  var CORRUPT = '#%&@$!?/\\|[]{}<>=+*^~01';
+  var flickerTimer = null, healDoneTimer = null;
 
   function rnd(a, b) { return a + Math.random() * (b - a); }
+  function rem() { return parseFloat(getComputedStyle(document.documentElement).fontSize); }
   function sleep(ms, gen) {
     return new Promise(function (res, rej) { setTimeout(function () { gen === healGen ? res() : rej('cancel'); }, ms); });
   }
   function el(cls, text) { var e = document.createElement('span'); e.className = cls; e.textContent = text; return e; }
-  function corruptText(text, amount) {
-    var out = '';
-    for (var i = 0; i < text.length; i++) {
-      out += (text[i] !== ' ' && Math.random() < amount) ? CORRUPT[(Math.random() * CORRUPT.length) | 0] : text[i];
-    }
-    return out;
-  }
+  function scrollTerm(body) { body.scrollTop = body.scrollHeight; }
   async function typeCmd(body, gen, parts) {
     if (body.childNodes.length) body.appendChild(document.createTextNode('\n'));
     body.appendChild(el('pr', 'PS C:\\FoxfireTech> '));
     var caret = el('tc', ' ');
     body.appendChild(caret);
+    scrollTerm(body);
     await sleep(260, gen);
     for (var p = 0; p < parts.length; p++) {
       var sp = el(parts[p][0], '');
       body.insertBefore(sp, caret);
       var t = parts[p][1];
-      for (var c = 0; c < t.length; c++) { sp.textContent += t[c]; await sleep(rnd(22, 46), gen); }
+      for (var c = 0; c < t.length; c++) { sp.textContent += t[c]; scrollTerm(body); await sleep(rnd(22, 46), gen); }
     }
     await sleep(240, gen);
     caret.remove();
@@ -1171,53 +1359,100 @@
     body.appendChild(document.createTextNode('\n'));
     var sp = el(cls, text);
     body.appendChild(sp);
+    scrollTerm(body);
     return sp;
+  }
+
+  /* Put the terminal beside the heading block if there's room,
+     otherwise slide it open in the page flow under the heading.
+     Either way it never sits on top of text. */
+  function placeTerm(term, h) {
+    var block = h.closest('.m-head') || h;
+    var wrap = h.closest('.wrap');
+    var R = rem();
+    if (window.innerWidth > 700 && block.classList.contains('m-head')) {
+      var hb = block.getBoundingClientRect(), wb = wrap.getBoundingClientRect();
+      var padR = parseFloat(getComputedStyle(wrap).paddingRight);
+      var left = hb.right - wb.left + 1.25 * R;
+      var avail = (wb.right - padR) - wb.left - left;
+      if (avail >= 20 * R) {
+        term.classList.add('side');
+        term.style.left = left + 'px';
+        term.style.top = (hb.top - wb.top) + 'px';
+        term.style.width = Math.min(avail, 32 * R) + 'px';
+        term.style.height = (hb.height + 1.1 * R) + 'px';
+        wrap.appendChild(term);
+        return;
+      }
+    }
+    term.classList.add('inline');
+    block.parentNode.insertBefore(term, block.nextSibling);
+  }
+
+  function startFlicker(spans, live) {
+    clearInterval(flickerTimer);
+    flickerTimer = setInterval(function () {
+      spans.forEach(function (s) {
+        if (!s) return;
+        if (live.indexOf(s) !== -1) {
+          if (Math.random() < 0.12) s.classList.remove('g');
+          else { s.setAttribute('data-g', rg()); s.classList.add('g'); }
+        }
+      });
+    }, 75);
   }
 
   async function runHeal(h) {
     var gen = healGen;
+    var dismissed = false;
     healRunning = true;
     activeHead = h;
     var text = h.getAttribute('data-text');
     var slug = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    var spans = charify(h, text);
+    var letters = spans.filter(Boolean);
+    var live = [];
+    var term = null;
     try {
-      // 1. Corrupt the heading
-      h.classList.add('corrupt');
-      for (var i = 0; i < 16; i++) { h.textContent = corruptText(text, 0.25 + i * 0.03); await sleep(85, gen); }
+      // 1. Corrupt the heading: letters progressively turn to flickering symbols
+      h.classList.add('corrupting');
+      startFlicker(spans, live);
+      var order = letters.slice().sort(function () { return Math.random() - 0.5; });
+      var target = Math.ceil(letters.length * 0.85);
+      for (var i = 0; i < target; i++) { live.push(order[i]); setG(order[i], true); await sleep(1300 / target, gen); }
+      await sleep(400, gen);
 
-      // 2. Open the terminal beside (desktop) or below (phone) the heading
-      var wrap = h.closest('.wrap');
-      var term = document.createElement('div');
+      // 2. Open the terminal
+      term = document.createElement('div');
       term.className = 'term';
       term.setAttribute('aria-hidden', 'true');
-      term.innerHTML = '<div class="term-bar"><span class="ps">&gt;_</span>Administrator: Windows PowerShell<span class="ctrl">&ndash;&#9633;&times;</span></div><pre class="term-body"></pre>';
-      var hr = h.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
-      var top = hr.top - wr.top;
-      term.style.top = (window.innerWidth <= 700 ? top + hr.height + 14 : top - 10) + 'px';
-      wrap.appendChild(term);
+      term.innerHTML = '<div class="term-bar"><span class="ps">&gt;_</span><span class="tt">Administrator: Windows PowerShell</span>' +
+        '<span class="ctrl">&ndash;</span><span class="ctrl">&#9633;</span><button class="tx" type="button" tabindex="-1" title="Close">&times;</button></div>' +
+        '<pre class="term-body"></pre>';
+      placeTerm(term, h);
       activeTerm = term;
+      term.querySelector('.tx').addEventListener('click', function () { dismissed = true; healGen++; });
       var body = term.querySelector('.term-body');
-      requestAnimationFrame(function () { term.classList.add('open'); });
-      await sleep(320, gen);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { term.classList.add('open'); }); });
+      await sleep(380, gen);
 
-      // 3. Clear the corrupted content
+      // 3. Clear-Content: the corrupted text is wiped to blank static
       await typeCmd(body, gen, [['cmd', 'Clear-Content'], ['arg', ' -Path .\\headings\\' + slug + '.txt']]);
-      var cur = h.textContent;
-      while (cur.length) { cur = cur.slice(0, -1); h.textContent = cur; await sleep(26, gen); }
-      h.classList.remove('corrupt');
-      h.classList.add('rebuilt');
-      h.textContent = '';
-      h.appendChild(el('caret', '_'));
-      await sleep(350, gen);
+      h.classList.add('cleared');
+      letters.forEach(function (s) { if (live.indexOf(s) === -1) live.push(s); setG(s, true); });
+      await sleep(500, gen);
 
-      // 4. Write it back
+      // 4. Set-Content: the static decodes back into the real words
       await typeCmd(body, gen, [['cmd', 'Set-Content'], ['arg', ' -Path .\\headings\\' + slug + '.txt -Value '], ['ok', '"' + text + '"']]);
-      for (var k = 1; k <= text.length; k++) {
-        h.textContent = text.slice(0, k);
-        h.appendChild(el('caret', '_'));
-        await sleep(42, gen);
+      h.classList.remove('cleared');
+      var fix = letters.slice().sort(function () { return Math.random() - 0.5; });
+      for (var k = 0; k < fix.length; k++) {
+        live.splice(live.indexOf(fix[k]), 1);
+        setG(fix[k], false);
+        await sleep(900 / fix.length, gen);
       }
-      h.textContent = text;
+      clearInterval(flickerTimer);
+      h.classList.remove('corrupting');
       await sleep(250, gen);
 
       // 5. Verify and repair
@@ -1244,25 +1479,42 @@
       print(body, 'ok', 'Windows Resource Protection found corrupt files and successfully repaired them.');
 
       // 6. Blue glow heals the heading
-      h.classList.remove('rebuilt');
+      h.textContent = text;
       h.classList.add('healing');
       await sleep(1700, gen);
       h.classList.remove('healing');
       await sleep(900, gen);
 
       // 7. Close the terminal
-      term.classList.remove('open');
-      await sleep(300, gen);
-      term.remove();
+      await closeTerm(term);
       activeTerm = null; activeHead = null; healRunning = false;
     } catch (e) {
+      if (dismissed && back.classList.contains('m-live')) {
+        // Closed with the X: snap the heading back, heal it, carry on
+        clearInterval(flickerTimer);
+        h.classList.remove('corrupting', 'cleared');
+        h.textContent = text;
+        h.classList.add('healing');
+        if (term) closeTerm(term);
+        activeTerm = null;
+        healDoneTimer = setTimeout(function () { h.classList.remove('healing'); activeHead = null; healRunning = false; scheduleHeal(false); }, 1700);
+        return;
+      }
       restoreHeal();
       throw e;
     }
   }
+  function closeTerm(term) {
+    return new Promise(function (res) {
+      term.classList.remove('open');
+      setTimeout(function () { term.remove(); res(); }, 320);
+    });
+  }
   function restoreHeal() {
+    clearInterval(flickerTimer);
+    clearTimeout(healDoneTimer);
     if (activeHead) {
-      activeHead.classList.remove('corrupt', 'rebuilt', 'healing');
+      activeHead.classList.remove('corrupting', 'cleared', 'healing');
       activeHead.textContent = activeHead.getAttribute('data-text');
     }
     if (activeTerm) activeTerm.remove();
@@ -1279,7 +1531,7 @@
     var pool = heads.filter(function (h) { return h !== lastHead; });
     var pick = pool[(Math.random() * pool.length) | 0];
     lastHead = pick;
-    runHeal(pick).then(function () { scheduleHeal(false); }, function () {});
+    runHeal(pick).then(function (r) { if (activeHead === null) scheduleHeal(false); }, function () {});
   }
   function startHeal() { if (!reduced) scheduleHeal(true); }
   function stopHeal() { healGen++; clearTimeout(healTimer); restoreHeal(); }
