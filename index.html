@@ -526,6 +526,8 @@
     .pun { height: 8.5rem; font-size: 1.2rem; margin-bottom: 1.25rem; }
   }
 
+  .pun .ch.g::after { color: #ffd08a; opacity: 1; text-shadow: 0 0 10px rgba(255, 150, 40, 0.9); }
+
   /* ---------- MSP side: animations ---------- */
 
   /* Fire on "Tech" */
@@ -863,7 +865,7 @@
               <span class="more"><span class="more-hover">Hover for details</span><span class="more-tap">Tap for details</span></span>
               <div class="details">
                 <h4>Computers &amp; Devices</h4>
-                <ul><li>New computers set up, files moved</li><li>Phones and tablets for your crew</li><li>Lock or wipe lost devices</li><li><span class="nw">Wi-Fi</span> that reaches, plus guest <span class="nw">Wi-Fi</span></li><li>Printers that just print</li></ul>
+                <ul><li>New computers set up, files moved</li><li>Phones and tablets for your crew</li><li>Lock or wipe lost devices</li><li><span class="nw">Wi-Fi</span> that reaches, plus guest <span class="nw">Wi-Fi</span></li><li>Office moves: gear moved and reconnected</li></ul>
                 <a class="ask" href="https://docs.google.com/forms/d/e/1FAIpQLScmOMCjItaF4D_C3R-gF29YHrA5qrJhjli-iA9pUPUpCa6GBA/viewform?usp=header" target="_blank" rel="noopener">Request this &rarr;</a>
               </div>
             </div>
@@ -1122,7 +1124,7 @@
             <span class="chip"><b>&gt;</b>MDT</span>
             <span class="chip"><b>&gt;</b>PDQ Deploy / Connect</span>
             <span class="chip"><b>&gt;</b>Security Monitoring</span>
-            <span class="chip"><b>&gt;</b>Vulnerability Management (full suite)</span>
+            <span class="chip"><b>&gt;</b>Vulnerability Management</span>
             <span class="chip"><b>&gt;</b>Patch Management</span>
             <span class="chip"><b>&gt;</b>Policy Compliance Scanning</span>
             <span class="chip"><b>&gt;</b>File Integrity Monitoring</span>
@@ -1136,7 +1138,6 @@
             <span class="chip"><b>&gt;</b>Microsoft Defender / EDR</span>
             <span class="chip"><b>&gt;</b>FortiNet</span>
             <span class="chip"><b>&gt;</b>Automation Anywhere (A360)</span>
-            <span class="chip"><b>&gt;</b>nmap / Nuclei</span>
           </div>
         </div>
       </section>
@@ -1177,7 +1178,7 @@
             <div class="m-card">
               <div class="tag mono">03 / LOCAL</div>
               <h3>Local Hands</h3>
-              <p>Client in Middle Tennessee but your team isn&#39;t? I&#39;m your trusted remote hands on site for hardware swaps, cabling checks, rack work, imaging, and malware removal.</p>
+              <p>Client in Middle Tennessee but your team isn&#39;t? I&#39;m your trusted remote hands on site for hardware swaps, cabling checks, rack work, imaging, malware removal, and moving equipment between offices or sites.</p>
             </div>
             <div class="m-card">
               <div class="tag mono">04 / PROJECT</div>
@@ -1301,9 +1302,9 @@
      kept words come together and glow orange (7s), fade out (3s), rest (20s). */
   var PUNS = [
     { mode: 'inplace', words: [[['Rem', 0], ['ember', 1]], [['to', 0]], [['reach', 0]], [['out.', 0]]] },
-    { mode: 'merge', words: [[['What', 0]], [['does', 0]], [['the', 0]], [['Fox', 1]], [['say?', 0]], 'BR',
+    { mode: 'merge', words: [[['What', 0]], [['does', 0]], [['the', 0]], [['fox', 1, 'F']], [['say?', 0]], 'BR',
       [['Ready', 0]], [['to', 0]], [['cook', 0]], [['with', 0]], [['gas?', 0]], [['Let’s', 0]], [['light', 0]], [['a', 0]], [['fire', 2]], [['under', 0]], [['it.', 0]]] },
-    { mode: 'merge', words: [[['Ready', 0]], [['to', 0]], [['out', 0], ['Fox', 1]], [['the', 0]], [['hackers', 0]], [['with', 0]], [['a', 0]], [['fire', 2], ['wall?', 0]]] }
+    { mode: 'merge', words: [[['Ready', 0]], [['to', 0]], [['out', 0], ['fox', 1, 'F']], [['the', 0]], [['hackers', 0]], [['with', 0]], [['a', 0]], [['fire', 2], ['wall?', 0]]] }
   ];
   var lastPun = -1;
   function PunRotator(stage) {
@@ -1325,7 +1326,16 @@
         w.forEach(function (part) {
           var sp = document.createElement('span');
           sp.className = 'ps';
-          sp.textContent = part[0];
+          if (part[2]) {
+            var first = document.createElement('span');
+            first.className = 'ch';
+            first.textContent = part[0][0];
+            sp.appendChild(first);
+            sp.appendChild(document.createTextNode(part[0].slice(1)));
+            sp.setAttribute('data-final', part[2] + part[0].slice(1));
+          } else {
+            sp.textContent = part[0];
+          }
           ws.appendChild(sp);
           if (part[1]) keep[part[1] - 1] = sp; else drop.push(sp);
         });
@@ -1349,7 +1359,24 @@
         await wait(7000, g);
       } else {
         var sr = stage.getBoundingClientRect();
-        var rects = keep.map(function (k) { return k.getBoundingClientRect(); });
+        var rects = keep.map(function (k) {
+          var r = k.getBoundingClientRect();
+          var fin = k.getAttribute('data-final');
+          if (fin) {
+            var probe = document.createElement('span');
+            probe.className = 'ps';
+            probe.style.position = 'absolute'; probe.style.visibility = 'hidden';
+            probe.textContent = fin;
+            stage.appendChild(probe);
+            var fw = probe.getBoundingClientRect().width;
+            probe.remove();
+            // lock its box so the wider capital doesn't reflow the centered line
+            k.style.width = r.width + 'px';
+            k.style.whiteSpace = 'nowrap';
+            return { left: r.left, top: r.top, width: fw, height: r.height };
+          }
+          return r;
+        });
         var tech = document.createElement('span');
         tech.className = 'pun-tech';
         tech.textContent = 'Tech';
@@ -1371,9 +1398,17 @@
         tech.style.top = (top - sr.top).toFixed(1) + 'px';
         await wait(1800, g);
         keep.forEach(function (k) { k.classList.add('glow'); });
-        await wait(2000, g);
+        await wait(1200, g);
+        // the lowercase f glitches through symbols and settles as a capital F
+        var caps = keep.filter(function (k) { return k.getAttribute('data-final'); });
+        for (var f = 0; f < 10; f++) {
+          caps.forEach(function (k) { var c = k.querySelector('.ch'); c.setAttribute('data-g', rg()); c.classList.add('g'); });
+          await wait(80, g);
+        }
+        caps.forEach(function (k) { var c = k.querySelector('.ch'); c.textContent = k.getAttribute('data-final')[0]; c.classList.remove('g'); });
+        await wait(200, g);
         tech.classList.add('show');
-        await wait(3200, g);
+        await wait(3000, g);
       }
       // 4. Clean fade out (3s)
       stage.classList.add('out');
