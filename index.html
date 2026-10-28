@@ -241,7 +241,7 @@
   .rules { list-style: none; display: grid; gap: 0.75rem; max-width: 47.5rem; }
   .rules li { background: var(--m-card); border: 1px solid var(--m-line); border-left: 3px solid var(--m-red); padding: 1rem 1.125rem; border-radius: 0.25rem; }
   .rules li strong { display: block; margin-bottom: 2px; }
-  .rules li span { color: var(--m-muted); font-size: 0.95rem; }
+  .rules li > span { color: var(--m-muted); font-size: 0.95rem; }
 
   .models { display: grid; grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr)); gap: 1rem; }
   .model { background: var(--m-card); border: 1px solid var(--m-line); border-radius: 0.25rem; padding: 1.375rem; }
@@ -468,6 +468,64 @@
   .tier { color: var(--m-muted); font-size: 0.72rem; letter-spacing: 0.12em; margin: 0 0 0.7rem; }
   .chips + .tier { margin-top: 1.6rem; }
 
+  .m-grid.two { grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
+  .m-card.feature { grid-column: 1 / -1; background: linear-gradient(135deg, #1c1416 0%, #161616 60%); }
+  .m-card.feature h3 { font-size: 1.2rem; }
+  .billing { margin-top: 1.4rem; color: var(--m-muted); font-size: 0.82rem; background: rgba(10,10,10,0.84); border: 1px solid var(--m-line); border-radius: 4px; padding: 0.75rem 1rem; display: inline-block; }
+  .hire { font-family: "Inter", sans-serif; font-size: 0.82rem; color: var(--m-muted); margin-bottom: 0.6rem; }
+  .hire a { color: var(--m-red); text-decoration: none; white-space: nowrap; }
+  .hire a:hover { text-decoration: underline; }
+
+  /* ---------- Contact puns ---------- */
+  .pun {
+    position: relative; height: 6.4rem; max-width: 46rem; margin: 0 auto 1.75rem;
+    font-size: 1.5rem; line-height: 1.35; pointer-events: none;
+  }
+  .front .pun { font-family: "Fraunces", serif; font-weight: 600; color: var(--text); }
+  .back .pun { font-family: "Inter", sans-serif; font-weight: 700; color: var(--m-text); letter-spacing: -0.01em; }
+  .pun.out { opacity: 0; filter: blur(4px); transition: opacity 3s ease, filter 3s ease; }
+  .pun-line {
+    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+    text-align: center; opacity: 0; filter: blur(6px);
+    transition: opacity 1.2s ease, filter 1.2s ease;
+  }
+  .pun-line.show { opacity: 1; filter: none; }
+  .pw { white-space: nowrap; }
+  .ps {
+    display: inline-block;
+    transition: opacity 2.4s ease, transform 2.4s cubic-bezier(0.55, 0, 0.75, 0.4), filter 2.4s ease,
+                color 1.8s ease, text-shadow 1.8s ease;
+  }
+  .ps.fall { opacity: 0; filter: blur(4px); transform: translate(var(--fx, 0), 0.9em) rotate(var(--fr, 0deg)); }
+  .ps.merge {
+    transform: translate(var(--tx, 0), var(--ty, 0));
+    transition: transform 3s cubic-bezier(0.65, 0, 0.35, 1), color 1.8s ease, text-shadow 1.8s ease;
+  }
+  .ps.glow {
+    color: #ffb35c;
+    text-shadow: 0 0 10px rgba(255, 150, 40, 0.85), 0 0 26px rgba(255, 90, 0, 0.5);
+    animation: emberpulse 2.6s ease-in-out 1.8s infinite alternate;
+  }
+  @keyframes emberpulse {
+    from { text-shadow: 0 0 8px rgba(255, 140, 40, 0.75), 0 0 20px rgba(255, 90, 0, 0.4); }
+    to   { text-shadow: 0 0 14px rgba(255, 175, 70, 1), 0 0 36px rgba(255, 100, 0, 0.65); }
+  }
+  .pun-tech {
+    position: absolute; white-space: nowrap; opacity: 0; transform: translateX(0.4em);
+    transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .pun-tech.show { opacity: 1; transform: none; }
+  .front .pun-tech { color: var(--glow); text-shadow: 0 0 12px rgba(155, 229, 100, 0.55); }
+  .back .pun-tech {
+    color: transparent; text-shadow: none;
+    background: linear-gradient(0deg, #c4120a 0%, #ff3b0a 35%, #ff8a00 65%, #ffd23a 100%);
+    -webkit-background-clip: text; background-clip: text;
+    filter: drop-shadow(0 0 6px rgba(255, 90, 0, 0.6));
+  }
+  @media (max-width: 600px) {
+    .pun { height: 8.5rem; font-size: 1.2rem; margin-bottom: 1.25rem; }
+  }
+
   /* ---------- MSP side: animations ---------- */
 
   /* Fire on "Tech" */
@@ -531,6 +589,7 @@
   .back.m-live .m-hero .m-btn { transition-delay: 0.45s; }
   .scramble { font-variant-ligatures: none; }
   /* Glyph layer: glitched letters keep their real width, symbol drawn on top */
+  .w { white-space: nowrap; }
   .ch { position: relative; }
   .ch.g { color: transparent !important; text-shadow: none !important; }
   .ch.g::after {
@@ -699,7 +758,7 @@
     .front .reveal, .front .hero .eyebrow, .front .hero h1, .front .hero p, .front .hero-actions > * { opacity: 1 !important; transform: none !important; }
     .front .squiggle path { stroke-dashoffset: 0 !important; }
     .skills li::before, .promise div::before { transform: none !important; }
-    .fireflies, .spore { display: none; }
+    .fireflies, .spore, .pun { display: none; }
     .details li { opacity: 1 !important; transform: none !important; }
     .shroom { transform: rotate(var(--rot, 0deg)) scale(1) !important; filter: drop-shadow(0 0 3px rgba(80, 200, 255, 0.8)); }
   }
@@ -952,7 +1011,7 @@
             </div>
             <div>
               <h3>I'm the one who shows up</h3>
-              <p>Need someone on site? I come out myself. No subcontractors, no tech you've never met.</p>
+              <p>Need someone on site? I come out myself. No subcontractors, no tech you&#39;ve never met.</p>
             </div>
             <div>
               <h3>No contracts to start</h3>
@@ -964,6 +1023,7 @@
 
       <section id="contact" class="alt">
         <div class="wrap">
+          <div class="pun" id="punFront" aria-hidden="true"></div>
           <div class="contact-box">
             <h2>Let's Fix Your Tech Headaches</h2>
             <p>Free <span class="nw">30-minute</span> tech checkup for new clients in Cheatham & Davidson County.</p>
@@ -986,7 +1046,7 @@
           <nav class="nav-links">
             <a href="#p-capabilities">Capabilities</a>
             <a href="#p-stack">Stack</a>
-            <a href="#p-engagement">Engagement</a>
+            <a href="#p-engagement">Services</a>
             <a href="#p-contact">Contact</a>
             <a data-flip="smb">Small Business</a>
           </nav>
@@ -996,9 +1056,9 @@
       <section class="m-hero">
         <div class="wrap">
           <div class="m-panel">
-          <div class="m-eyebrow mono">Partner Services &middot; Middle Tennessee<span class="cursor">_</span></div>
+          <div class="m-eyebrow mono"><span class="nw">White-Label</span> Microshop &middot; Middle Tennessee<span class="cursor">_</span></div>
           <h1>Overflow capacity and onsite hands for <em class="scramble" data-text="MSPs and IT teams.">MSPs and IT teams.</em></h1>
-          <p>Independent IT contractor with federal judiciary, local government, and enterprise experience, strongest in Intune, Entra ID, endpoint deployment, security monitoring, and vulnerability management. I plug into your process, work under your brand, and close tickets your way.</p>
+          <p>A <span class="nw">one-person</span> shop built to be part of your team: burst capacity when tickets pile up, local hands when your client is out of reach, and <span class="nw">white-glove</span> service under your brand. Strongest in Intune, Entra ID, endpoint deployment, security monitoring, and vulnerability management.</p>
           <a href="#p-contact" class="m-btn">Talk Partnership</a>
           </div>
         </div>
@@ -1089,9 +1149,10 @@
           </div>
           <ul class="rules">
             <li><strong><span class="nw">Non-solicitation</span>, signed up front</strong><span>I won't pursue, accept, or poach your clients. Happy to sign your agreement or bring my own.</span></li>
-            <li><strong>Your brand, not mine</strong><span>I show up and communicate as part of your team.</span></li>
+            <li><strong><span class="nw">White-glove</span> with your clients</strong><span>I treat every end user like they&#39;re your best account, because they are.</span></li>
             <li><strong>Your tools, your process</strong><span>I work in your PSA, RMM, and documentation platform, to your standards.</span></li>
             <li><strong>Documented handoffs</strong><span>Every ticket closes with notes your team can pick up cold.</span></li>
+            <li><strong><span class="nw">AI-enhanced</span>, never <span class="nw">vibe-coded</span></strong><span>AI speeds up my workflow, but every script and change gets reviewed by me before it touches your environment. Real foundational knowledge underneath, from real experience.</span></li>
           </ul>
         </div>
       </section>
@@ -1099,31 +1160,43 @@
       <section id="p-engagement" class="alt">
         <div class="wrap">
           <div class="m-head">
-            <h2>Engagement Models</h2>
-            <p class="lead">Pick what fits your workload. Partner rates on request.</p>
+            <h2><span class="nw">White-Glove</span> Services</h2>
+            <p class="lead">Overflow protection or a specialized project resource, under your brand.</p>
           </div>
-          <div class="models">
-            <div class="model">
-              <div class="num mono">01</div>
-              <h3>Hourly Overflow</h3>
-              <p><span class="nw">On-call</span> help when tickets pile up. Bill only what you use.</p>
+          <div class="m-grid two">
+            <div class="m-card">
+              <div class="tag mono">01 / <span class="nw">WHITE-LABEL</span></div>
+              <h3><span class="nw">White-Label</span></h3>
+              <p>I wear your hat. I work under your email domain, use your ticket signatures, and introduce myself to your client as part of your team. Your client never meets a subcontractor.</p>
             </div>
-            <div class="model">
-              <div class="num mono">02</div>
-              <h3><span class="nw">Fixed-Scope</span> Projects</h3>
-              <p>Deployments, migrations, and security rollouts at a set price.</p>
+            <div class="m-card">
+              <div class="tag mono">02 / BURST</div>
+              <h3>Burst Capacity</h3>
+              <p><span class="nw">As-needed</span> help when a ticket flood hits, a migration lands, or your techs are out sick or on vacation. Call me in, then send me home.</p>
             </div>
-            <div class="model">
-              <div class="num mono">03</div>
-              <h3>Block Hours</h3>
-              <p>Prepaid hours at a better rate, drawn down as needed.</p>
+            <div class="m-card">
+              <div class="tag mono">03 / LOCAL</div>
+              <h3>Local Hands</h3>
+              <p>Client in Middle Tennessee but your team isn&#39;t? I&#39;m your trusted remote hands on site for hardware swaps, cabling checks, rack work, imaging, and malware removal.</p>
+            </div>
+            <div class="m-card">
+              <div class="tag mono">04 / PROJECT</div>
+              <h3>Project Resource</h3>
+              <p>A specialized hand for a defined project: Intune rollouts, imaging refreshes, and vulnerability management buildouts. Scoped, delivered, and documented.</p>
+            </div>
+            <div class="m-card feature">
+              <div class="tag mono">05 / RESIDENT</div>
+              <h3>Resident Technician</h3>
+              <p>Several clients in one building or office park? I set up shop on site as your <span class="nw">in-house</span> Tier 1 technician: <span class="nw">walk-up</span> support, <span class="nw">same-hour</span> response, and a familiar face your clients see every day, all under your brand.</p>
             </div>
           </div>
+          <p class="billing mono">&gt; Billed hourly for overflow, fixed price for scoped projects, or as prepaid block hours. Partner rates on request.</p>
         </div>
       </section>
 
       <section id="p-contact">
         <div class="wrap">
+          <div class="pun" id="punBack" aria-hidden="true"></div>
           <div class="m-contact">
             <h2>Need Another Set of Hands?</h2>
             <p>Remote anywhere. Onsite across Cheatham, Davidson, and surrounding counties.</p>
@@ -1134,7 +1207,10 @@
       </section>
 
       <footer>
-        <div class="wrap mono">&copy; 2026 Foxfire Tech &middot; David Ewing &middot; Partner Services</div>
+        <div class="wrap mono">
+          <p class="hire">Recruiter or talent acquisition? I&#39;m available to hire for the right opportunity. <a href="mailto:davidewing615@gmail.com?subject=Hiring%20Inquiry">Get in touch &rarr;</a></p>
+          &copy; 2026 Foxfire Tech &middot; David Ewing &middot; Partner Services
+        </div>
       </footer>
     </div>
 
@@ -1220,13 +1296,120 @@
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }) : null;
 
+  /* ---------- Contact puns ----------
+     One pun every cycle: fade in and read (~3.8s), unrelated words fall away (5s),
+     kept words come together and glow orange (7s), fade out (3s), rest (20s). */
+  var PUNS = [
+    { mode: 'inplace', words: [[['Rem', 0], ['ember', 1]], [['to', 0]], [['reach', 0]], [['out.', 0]]] },
+    { mode: 'merge', words: [[['What', 0]], [['does', 0]], [['the', 0]], [['Fox', 1]], [['say?', 0]], 'BR',
+      [['Ready', 0]], [['to', 0]], [['cook', 0]], [['with', 0]], [['gas?', 0]], [['Let’s', 0]], [['light', 0]], [['a', 0]], [['fire', 2]], [['under', 0]], [['it.', 0]]] },
+    { mode: 'merge', words: [[['Ready', 0]], [['to', 0]], [['out', 0], ['Fox', 1]], [['the', 0]], [['hackers', 0]], [['with', 0]], [['a', 0]], [['fire', 2], ['wall?', 0]]] }
+  ];
+  var lastPun = -1;
+  function PunRotator(stage) {
+    var gen = 0;
+    function wait(ms, g) { return new Promise(function (res, rej) { setTimeout(function () { g === gen ? res() : rej('stop'); }, ms); }); }
+    function visible() { var r = stage.getBoundingClientRect(); return r.width > 0 && r.bottom > 0 && r.top < window.innerHeight; }
+    function clear() { stage.classList.remove('out'); stage.innerHTML = ''; }
+    async function play(pun, g) {
+      clear();
+      var line = document.createElement('div');
+      line.className = 'pun-line';
+      stage.appendChild(line);
+      var keep = [], drop = [];
+      pun.words.forEach(function (w) {
+        if (w === 'BR') { line.appendChild(document.createElement('br')); return; }
+        if (line.lastChild && line.lastChild.nodeName !== 'BR') line.appendChild(document.createTextNode(' '));
+        var ws = document.createElement('span');
+        ws.className = 'pw';
+        w.forEach(function (part) {
+          var sp = document.createElement('span');
+          sp.className = 'ps';
+          sp.textContent = part[0];
+          ws.appendChild(sp);
+          if (part[1]) keep[part[1] - 1] = sp; else drop.push(sp);
+        });
+        line.appendChild(ws);
+      });
+      // 1. Fade in and give it time to be read
+      await wait(40, g);
+      line.classList.add('show');
+      await wait(3800, g);
+      // 2. Unrelated words fall away (5s)
+      drop.forEach(function (sp) {
+        sp.style.transitionDelay = (Math.random() * 2600).toFixed(0) + 'ms';
+        sp.style.setProperty('--fx', ((Math.random() * 2 - 1) * 0.35).toFixed(2) + 'em');
+        sp.style.setProperty('--fr', ((Math.random() * 2 - 1) * 10).toFixed(1) + 'deg');
+        sp.classList.add('fall');
+      });
+      await wait(5000, g);
+      // 3. Kept words come together and glow (7s)
+      if (pun.mode === 'inplace') {
+        keep.forEach(function (k) { k.classList.add('glow'); });
+        await wait(7000, g);
+      } else {
+        var sr = stage.getBoundingClientRect();
+        var rects = keep.map(function (k) { return k.getBoundingClientRect(); });
+        var tech = document.createElement('span');
+        tech.className = 'pun-tech';
+        tech.textContent = 'Tech';
+        stage.appendChild(tech);
+        var techW = tech.getBoundingClientRect().width;
+        var total = rects.reduce(function (a, r) { return a + r.width; }, 0) + techW;
+        var left = sr.left + (sr.width - total) / 2;
+        var top = sr.top + (sr.height - rects[0].height) / 2;
+        var x = left;
+        keep.forEach(function (k, i) {
+          var r = rects[i];
+          k.style.transitionDelay = '0ms';
+          k.style.setProperty('--tx', (x - r.left).toFixed(1) + 'px');
+          k.style.setProperty('--ty', (top - r.top).toFixed(1) + 'px');
+          x += r.width;
+          k.classList.add('merge');
+        });
+        tech.style.left = (x - sr.left).toFixed(1) + 'px';
+        tech.style.top = (top - sr.top).toFixed(1) + 'px';
+        await wait(1800, g);
+        keep.forEach(function (k) { k.classList.add('glow'); });
+        await wait(2000, g);
+        tech.classList.add('show');
+        await wait(3200, g);
+      }
+      // 4. Clean fade out (3s)
+      stage.classList.add('out');
+      await wait(3000, g);
+      clear();
+    }
+    async function loop(g) {
+      try {
+        await wait(2500, g);
+        while (true) {
+          while (!visible() || document.hidden || busy) await wait(1000, g);
+          var idx;
+          do { idx = (Math.random() * PUNS.length) | 0; } while (idx === lastPun);
+          lastPun = idx;
+          await play(PUNS[idx], g);
+          await wait(20000, g);
+        }
+      } catch (e) { clear(); }
+    }
+    return {
+      start: function () { if (reduced) return; gen++; loop(gen); },
+      stop: function () { gen++; clear(); }
+    };
+  }
+  var punFront = PunRotator(document.getElementById('punFront'));
+  var punBack = PunRotator(document.getElementById('punBack'));
+
   function enterFront() {
+    punFront.start();
     front.classList.add('f-live');
     fReveals.forEach(function (el) {
       if (reduced || !fio) el.classList.add('in'); else fio.observe(el);
     });
   }
   function leaveFront() {
+    punFront.stop();
     front.classList.remove('f-live');
     fReveals.forEach(function (el) { el.classList.remove('in'); if (fio) fio.unobserve(el); });
   }
@@ -1269,14 +1452,16 @@
   var GLYPHS = '!/\\[]{}=+*^?#01%$&@<>~|';
   function rg() { return GLYPHS[(Math.random() * GLYPHS.length) | 0]; }
   function charify(node, text) {
+    // letters are grouped per word in a no-wrap span, so words never split mid-glitch
     node.textContent = '';
-    var spans = [];
+    var spans = [], word = null;
     for (var i = 0; i < text.length; i++) {
-      if (text[i] === ' ') { node.appendChild(document.createTextNode(' ')); spans.push(null); continue; }
+      if (text[i] === ' ') { node.appendChild(document.createTextNode(' ')); spans.push(null); word = null; continue; }
+      if (!word) { word = document.createElement('span'); word.className = 'w'; node.appendChild(word); }
       var s = document.createElement('span');
       s.className = 'ch';
       s.textContent = text[i];
-      node.appendChild(s);
+      word.appendChild(s);
       spans.push(s);
     }
     return spans;
@@ -1333,7 +1518,7 @@
 
   /* ---------- Header corruption + PowerShell repair ---------- */
   var heads = Array.prototype.slice.call(back.querySelectorAll('section h2'));
-  heads.forEach(function (h) { h.setAttribute('data-text', h.textContent); h.setAttribute('aria-label', h.textContent); });
+  heads.forEach(function (h) { h.setAttribute('data-text', h.textContent); h.setAttribute('data-html', h.innerHTML); h.setAttribute('aria-label', h.textContent); });
   var healGen = 0, healTimer = null, healRunning = false, activeTerm = null, activeHead = null, lastHead = null;
   var flickerTimer = null, healDoneTimer = null;
 
@@ -1484,7 +1669,7 @@
       print(body, 'ok', 'Windows Resource Protection found corrupt files and successfully repaired them.');
 
       // 6. Blue glow heals the heading
-      h.textContent = text;
+      h.innerHTML = h.getAttribute('data-html');
       h.classList.add('healing');
       await sleep(1700, gen);
       h.classList.remove('healing');
@@ -1498,7 +1683,7 @@
         // Closed with the X: snap the heading back, heal it, carry on
         clearInterval(flickerTimer);
         h.classList.remove('corrupting', 'cleared');
-        h.textContent = text;
+        h.innerHTML = h.getAttribute('data-html');
         h.classList.add('healing');
         if (term) closeTerm(term);
         activeTerm = null;
@@ -1520,7 +1705,7 @@
     clearTimeout(healDoneTimer);
     if (activeHead) {
       activeHead.classList.remove('corrupting', 'cleared', 'healing');
-      activeHead.textContent = activeHead.getAttribute('data-text');
+      activeHead.innerHTML = activeHead.getAttribute('data-html');
     }
     if (activeTerm) activeTerm.remove();
     activeTerm = null; activeHead = null; healRunning = false;
@@ -1542,6 +1727,7 @@
   function stopHeal() { healGen++; clearTimeout(healTimer); restoreHeal(); }
 
   function enterBack() {
+    punBack.start();
     back.classList.add('m-live');
     if (reduced) { reveals.forEach(function (el) { el.classList.add('in'); }); return; }
     back.querySelectorAll('.scramble').forEach(scramble);
@@ -1551,6 +1737,7 @@
     startHeal();
   }
   function leaveBack() {
+    punBack.stop();
     stopHeal();
     back.classList.remove('m-live');
     cancelAnimationFrame(scrambleRAF);
