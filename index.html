@@ -69,7 +69,29 @@
     min-height: 100vh;
   }
   .face.front { background: var(--bg); }
-  .face.back { background: var(--m-bg); color: var(--m-text); transform: rotateY(180deg); }
+  .face.back { background: transparent; color: var(--m-text); transform: rotateY(180deg); }
+
+  /* MSP background video (fixed behind the page, fades in on flip) */
+  .stage { position: relative; z-index: 1; }
+  .bg-video {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    opacity: 0; transition: opacity var(--flip-ms) ease;
+    background: var(--m-bg);
+  }
+  html.msp .bg-video { opacity: 1; }
+  .bg-video video {
+    width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%;
+    filter: saturate(0.95) brightness(0.9);
+  }
+  .bg-video::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(10,10,10,0.93) 0%, rgba(10,10,10,0.8) 40%, rgba(10,10,10,0.38) 72%, rgba(10,10,10,0.25) 100%),
+      linear-gradient(0deg, rgba(10,10,10,0.6) 0%, transparent 35%);
+  }
+  @media (max-width: 700px) {
+    .bg-video::after { background: rgba(10,10,10,0.78); }
+  }
   .face.collapsed { height: 0; min-height: 0; overflow: hidden; }
   html.no-anim .flipper, html.no-anim, html.no-anim .stage { transition: none !important; animation: none !important; }
 
@@ -197,7 +219,7 @@
   }
   .m-btn:hover { filter: brightness(1.1); }
 
-  .back section.alt { background: var(--m-bg-alt); }
+  .back section.alt { background: rgba(17, 17, 17, 0.62); }
   .back h2 { font-family: "Inter", sans-serif; font-weight: 700; letter-spacing: -0.01em; }
   .back h2::before { content: "// "; color: var(--m-red); font-family: "JetBrains Mono", monospace; font-size: 1.4rem; }
   .back .lead { color: var(--m-muted); }
@@ -544,6 +566,10 @@
     </symbol>
   </defs>
 </svg>
+
+<div class="bg-video" aria-hidden="true">
+  <video id="bgVideo" muted loop playsinline preload="none" disablepictureinpicture></video>
+</div>
 
 <div class="stage" id="stage">
   <div class="flipper" id="flipper">
@@ -1031,11 +1057,26 @@
     reveals.forEach(function (el) { el.classList.remove('in'); if (io) io.unobserve(el); });
   }
 
+  /* Background video: only loads once someone visits the MSP side */
+  var bgVideo = document.getElementById('bgVideo');
+  var saveData = navigator.connection && navigator.connection.saveData;
+  var videoLoaded = false;
+  function videoOn() {
+    if (!bgVideo) return;
+    if (!videoLoaded) {
+      bgVideo.poster = 'assets/owl-poster.jpg';
+      if (!reduced && !saveData) { bgVideo.src = 'assets/owl-loop.mp4'; bgVideo.load(); }
+      videoLoaded = true;
+    }
+    if (!reduced && !saveData) { var p = bgVideo.play(); if (p && p.catch) p.catch(function () {}); }
+  }
+  function videoOff() { if (bgVideo) bgVideo.pause(); }
+
   function finish(toBack) {
     (toBack ? front : back).classList.add('collapsed');
     (toBack ? front : back).setAttribute('inert', '');
     (toBack ? back : front).removeAttribute('inert');
-    if (!toBack) leaveBack(); else leaveFront();
+    if (!toBack) { leaveBack(); videoOff(); } else leaveFront();
     busy = false;
   }
 
@@ -1052,6 +1093,7 @@
     front.classList.remove('collapsed');
     back.classList.remove('collapsed');
     window.scrollTo(0, 0);
+    if (toBack) videoOn();
 
     if (!animate || reduced) {
       html.classList.add('no-anim');
